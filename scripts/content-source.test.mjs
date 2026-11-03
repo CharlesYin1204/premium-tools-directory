@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validate} from '../lib/resources.js';
+const base={title:'有效内容',slug:'valid-content',company_id:'co',category_ids:['cat'],type:'video',rights_status:'approved',rights_note:'授权依据',brand:'品牌',cover_url:'/media/cover.webp',play_url:'/media/video.webm',chapters:[],source_system:'source',source_id:'123'};
+const rows=[{id:'co',kind:'companies',published:{}},{id:'cat',kind:'categories',published:{}},{id:'site',kind:'settings',published:{content_release_approved:true,approval_note:'已确认'}}];
+test('草稿允许待补来源，视频发布必须有来源和授权但不要求品牌',async()=>{await validate('contents',{...base,source_id:''},rows,'new');for(const key of ['source_id','source_system','rights_note'])await assert.rejects(validate('contents',{...base,[key]:'  '},rows,'new',true),e=>e.status===422&&!!e.fields[key]);});
+test('来源唯一性涵盖草稿和发布快照，空格不能绕过',async()=>{for(const field of ['draft','published']){const records=[...rows,{id:'old',kind:'contents',draft:{slug:'old-draft',source_system:'other',source_id:'456'},[field]:{...base,slug:'old'}}];await assert.rejects(validate('contents',{...base,source_id:' 123 '},records,'new'),e=>e.status===409&&!!e.fields.source_id);}});
+test('自身编辑和不同来源可使用相同源编号',async()=>{const records=[...rows,{id:'old',kind:'contents',draft:base,published:base}];await validate('contents',base,records,'old');await validate('contents',{...base,slug:'other',source_system:'another'},records,'new');});
+
+test('视频不依赖渠道品牌，漫画仍保留品牌与渠道发布门槛',async()=>{await validate('contents',{...base,company_id:'',brand:''},rows,'new',true);await assert.rejects(validate('contents',{...base,type:'comic',brand:''},rows,'new',true),e=>e.status===422&&!!e.fields.brand);});

@@ -1,0 +1,16 @@
+{
+  "resources": {
+    "05da60f6-ebf6-47f4-8e80-e82252f35036": "1e3b215766d528da65a25386f9eda20129d26f0330aee1be731b5035f3d97d27",
+    "08b98533-fe61-4394-a8ac-ec73a74360bb": "3c6899290c6c9850d3cca8610f257abd7eb08723f2eaa16a163bb1d0d1274185",
+    "146c99a4-57cd-485b-a624-61d9635449b5": "45c24b1a655b9d77109e755eb9f9b32f62ddfccb57256e66beeac67a8fc07bb8",
+    "4d76c1a4-2c76-4c4b-ac83-0e022d9a78ab": "2fdc8ebcc3d1c869b47e0f45aee8623374824d9975c539c70227454353bbcf44",
+    "fc55709c-75ea-4d32-a14c-9b854dd08c2d": "1ab89f97e6bbc950ac3d953840754053bfc76bdb531f18bee6df485f3f635558"
+  },
+  "metadata_hosts": [
+    "www.wikipedia.org",
+    "zh.wikipedia.org",
+    "en.wikipedia.org",
+    "developer.mozilla.org",
+    "www.nasa.gov"
+  ]
+}

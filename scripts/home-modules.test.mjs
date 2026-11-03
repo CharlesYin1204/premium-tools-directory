@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {defaultHomeModules,homeModuleError,homeModules} from '../lib/home-modules.js';
+test('旧配置保留默认顺序，合法排序及关闭不被重置',()=>{const d=defaultHomeModules();assert.equal(homeModuleError(d),null);assert.deepEqual(homeModules(undefined),d);d.reverse();d[0].enabled=false;assert.deepEqual(homeModules(d),d);assert.equal(homeModuleError(d),null);});
+test('拒绝重复未知模块及超限数量和错误类型',()=>{for(const mutate of [d=>d.pop(),d=>d[0].id=d[1].id,d=>d[0].id='unknown',d=>d[0].limit=999,d=>d[0].limit=1.2,d=>d[0].title='',d=>d[0].enabled='yes']){const d=defaultHomeModules();mutate(d);assert(homeModuleError(d));}});

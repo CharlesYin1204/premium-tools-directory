@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {optionalReport} from '../lib/optional-report.js';
+test('统计错误不构造零值，成功保留原始结果',async()=>{const data={metrics:{pv:17}};assert.deepEqual(await optionalReport(async()=>data),{stats:data,stats_status:'ok'});const result=await optionalReport(async()=>{throw Error('private database details');});assert.equal(result.stats,null);assert.equal(result.stats_status,'unavailable');assert.match(result.stats_error.request_id,/^[a-f0-9-]{36}$/);assert.ok(!JSON.stringify(result).includes('private'));});
+test('参数和权限错误继续拒绝',async()=>{for(const status of [400,401,403,422])await assert.rejects(optionalReport(async()=>{throw Object.assign(Error(),{status});}),e=>e.status===status);});

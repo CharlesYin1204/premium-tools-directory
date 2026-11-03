@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {entryConflict} from '../lib/entry-conflict.js';
+test('目标序列化及线上快照占用',()=>{assert.equal(entryConflict({name:'工具',company_id:'a',target_url:'https://EXAMPLE.com:443'},[null,{name:'旧站',company_id:'b',target_url:'https://example.com/'}]),'target_url');});
+test('同公司名称去首尾空白，目标语义不合并',()=>{const peer={name:' 工具 ',company_id:'a',target_url:'https://example.com/A?q=1#x'};assert.equal(entryConflict({name:'工具',company_id:'a',target_url:'https://other.example/'},[peer]),'name');for(const target_url of ['http://example.com/A?q=1#x','https://example.com/a?q=1#x','https://example.com/A?q=2#x','https://example.com/A?q=1#y'])assert.equal(entryConflict({name:'工具',company_id:'b',target_url},[peer]),null);});

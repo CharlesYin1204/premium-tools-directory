@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {isLocalContentTarget} from '../lib/local-content-target.js';
+test('Only public content destinations are permitted',()=>{for(const url of ['/videos','/comics','/video/original-short','/comic/sample-1'])assert.equal(isLocalContentTarget(url),true);for(const url of ['//evil.example','/admin','/go/a','/videos?next=https://evil.example','/video/../admin','/video/%2e%2e','/videos\n','https://example.org'])assert.equal(isLocalContentTarget(url),false,url);});

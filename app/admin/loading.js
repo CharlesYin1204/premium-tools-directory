@@ -1,0 +1,1 @@
+export default function Loading(){return <main className="public-main" aria-busy="true" aria-label="正在加载"><div className="skeleton hero-skeleton"/><div className="entry-grid">{[1,2,3].map(i=><div className="skeleton card-skeleton" key={i}/>)}</div></main>;}

@@ -1,0 +1,5 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {offlineImpact} from '../lib/resources.js';
+const row=(id,kind,published,draft=published)=>({id,kind,published,draft});
+const rows=[row('site','settings',{content_release_approved:true}),row('a','companies',{}),row('b','companies',{}),row('cat','categories',{}),row('entry','entries',{company_id:'a',category_ids:['cat']},{company_id:'b',category_ids:['cat']}),row('p','placements',{entry_id:'entry',device:'all',location:'home'})];
+test('影响范围依据发布归属而非草稿，批量资源去重',()=>{const a=offlineImpact(rows,['a']);assert.equal(a.hidden.entries,1);assert.equal(a.hidden.placements,1);assert.equal(a.references.entries,1);const b=offlineImpact(rows,['b']);assert.equal(b.hidden.entries,0);assert.equal(b.references.entries,1);assert.equal(offlineImpact(rows,['a','entry']).hidden.entries,1);assert.equal(rows[4].published.company_id,'a');});
+test('不存在或站点设置禁止计算下架',()=>{assert.throws(()=>offlineImpact(rows,['missing']),e=>e.status===404);assert.throws(()=>offlineImpact(rows,['site']),e=>e.status===422);});

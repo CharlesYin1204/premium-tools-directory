@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {publicAddress,safeUrl} from '../lib/security.js';
+import {publicData,validate} from '../lib/resources.js';
+import {dateWhere,csv} from '../lib/analytics.js';
+const row=(id,kind,published,draft=published,extra={})=>({id,kind,published,draft,status:'published',version:1,...extra});
+test('拒绝本地、私网、保留地址与 IPv4 映射地址',()=>{for(const ip of ['127.0.0.1','10.0.0.1','192.168.1.1','172.16.0.2','169.254.169.254','::1','::ffff:127.0.0.1','0.0.0.0'])assert.equal(publicAddress(ip),false);assert.equal(publicAddress('1.1.1.1'),true);});
+test('非法协议不能成为跳转目标',async()=>{for(const url of ['javascript:alert(1)','data:text/html,a','file:///etc/passwd','http://127.0.0.1','https://user:pass@example.com'])await assert.rejects(safeUrl(url),e=>e.status===422);});
+test('保存草稿不泄露到前台，停用关联公司自动隐藏入口与推广',()=>{const rows=[row('co','companies',{name:'发布公司'}),row('cat','categories',{name:'发布分类'}),row('e','entries',{name:'发布标题',company_id:'co',category_ids:['cat']},{name:'未发布修改',company_id:'co',category_ids:['cat']}),row('draft','entries',null,{name:'草稿'}),row('p','placements',{entry_id:'e',location:'home'})];assert.equal(publicData(rows).entries[0].name,'发布标题');assert.equal(publicData(rows).entries.length,1);rows[0].published=null;assert.equal(publicData(rows).entries.length,0);assert.equal(publicData(rows).placements.length,0);});
+test('撤权内容不可消费',()=>{const rows=[row('co','companies',{name:'公司'}),row('cat','categories',{name:'分类'}),row('c','contents',{company_id:'co',category_ids:['cat'],rights_status:'approved'},undefined,{revoked:true})];assert.equal(publicData(rows).contents.length,0);});
+test('报表同一筛选用于查询和导出，日期按上海零点归属',()=>{const r=dateWhere(new URLSearchParams({start:'2026-09-24',end:'2026-09-24',device:'pc',company_id:'co'}));assert.equal(r.values[0],'2026-09-23 16:00:00');assert.equal(r.values[1],'2026-09-24 16:00:00');assert.ok(r.where.includes('company_id=?'));assert.ok(r.where.includes('is_test=0'));assert.throws(()=>dateWhere(new URLSearchParams({start:'2026-09-25',end:'2026-09-24'})));});
+test('CSV 转义公式且曝光为零不伪造 CTR',()=>{const output=csv({start:'2026-09-24',end:'2026-09-24',timezone:'Asia/Shanghai',updated_at:'now',entries:[{name:'=1+1',clicks:1,impressions:0}]});assert.ok(output.includes("'=1+1"));assert.ok(output.includes('—'));});
+test('两级分类防循环，发布要求公司和分类已经上线',async()=>{await assert.rejects(validate('categories',{name:'分类',slug:'category',parent_id:'self'},[row('self','categories',{name:'分类'})],'self'),e=>e.status===422);await assert.rejects(validate('entries',{name:'入口',slug:'entry',company_id:'co',category_ids:['cat'],target_url:'https://example.com'},[row('co','companies',null,{name:'公司'}),row('cat','categories',{name:'分类'})],'e',true),e=>e.status===422);});

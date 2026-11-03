@@ -1,0 +1,47 @@
+/* Explicitly scoped shared spacing, loaded after public themes. */
+.admin-app .panel>.panel-title{padding:24px 24px 16px;margin:0;min-width:0;flex-wrap:wrap}
+.admin-app .edit-panel>form>.form-grid{padding:24px;gap:22px 24px}
+.admin-app .edit-panel>form>.ai-entry-fill{margin:0 24px 20px;padding:18px 20px}
+.admin-app .app-editor{padding:0 24px 24px;min-width:0}
+.admin-app .app-editor>.ad-editor-section{padding:20px 0}
+.admin-app .app-editor .form-grid{padding:18px 0;gap:22px}
+.admin-app .app-editor .panel{padding:18px;margin:16px 0}
+.admin-app .app-editor .panel>.panel-title{padding:0 0 16px}
+.admin-app .app-editor label.form-field,.admin-app .app-editor .form-grid>label{display:flex;flex-direction:column;gap:8px;min-width:0;line-height:1.6}
+.admin-app .app-editor .form-actions label{display:flex;align-items:center;gap:6px}
+.admin-app .workflow-summary{padding:18px 24px}.admin-app .resource-workflow>.form-actions{padding:16px 24px;gap:10px;flex-wrap:wrap}.admin-app .resource-workflow>p{padding:0 24px 16px;margin:0}
+.admin-app .revision-list,.admin-app .workflow-history{margin:16px 24px;padding:14px}
+.admin-app :is(.edit-panel,.user-form,.password-form) :is(input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea){padding:11px 12px;line-height:1.5;min-width:0;max-width:100%;box-sizing:border-box}
+.admin-app .edit-panel :is(label,p,small,legend){overflow-wrap:anywhere}
+.admin-app .user-form,.admin-app .password-form{padding:20px 24px;gap:18px}
+.admin-app .user-form>label,.admin-app .password-form>label{display:flex;flex-direction:column;gap:8px;min-width:0}
+.admin-app .ai-config-form{padding:24px}.admin-app .panel>p:not(.panel-title p){margin:16px 24px;line-height:1.7}
+.admin-app .ai-config-form fieldset{min-width:0}.admin-app .form-field>label{line-height:1.5;margin-bottom:8px}
+.admin-pagination{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;padding:18px 20px;border-top:1px solid #e1e6ef;color:#65758b;font-size:12px;background:#fff;border-radius:0 0 12px 12px}
+.admin-pagination>label{display:flex;align-items:center;gap:8px;white-space:nowrap}.admin-pagination select{padding:8px 10px;min-height:40px;border:1px solid #d5dce8;border-radius:6px;background:#fff;color:#33425b;font:inherit}.admin-pagination-actions{display:flex;align-items:center;gap:8px}.admin-pagination .button{font-size:12px;min-height:40px;padding:8px 12px}
+.ad-location-details{padding:14px 0;display:grid;gap:10px;min-width:0}.ad-location-details p{font-size:13px;line-height:1.8;color:#405473;margin:0}.ad-location-details label{display:grid;gap:6px;font-size:12px;color:#64768f}.ad-location-details select{width:100%;min-width:0;padding:10px;border:1px solid #d6deeb;border-radius:7px;background:#fff;color:#344760}.ad-location-details>strong{font-size:12px;color:#354965}.ad-location-link{font-size:12px;color:#5243bd;text-decoration:underline;line-height:1.6}.ad-location-details small{font-size:11px;color:#73829a;line-height:1.7}.ad-location-details.is-compact{min-width:220px;max-width:350px}
+.ad-performance-table table{min-width:1020px}.ad-performance-table td{vertical-align:top;padding:18px}.ad-performance-table td:first-child{min-width:270px;max-width:330px}.ad-performance-table code{display:block;font-size:11px;color:#76839a;overflow-wrap:anywhere;margin:6px 0}.ad-performance-table .ad-list-thumbnails img{height:65px;max-width:120px;object-fit:contain}.ad-performance-table .ad-list-material{margin-top:10px}.ad-performance-table td:last-child{min-width:110px}.ad-performance-table td:last-child button{display:block;margin-bottom:10px}.ad-performance-table .badge{white-space:normal}
+@media(max-width:767px){.admin-app .panel>.panel-title{padding:18px 16px 12px}.admin-app .edit-panel>form>.form-grid{padding:18px 16px;gap:20px}.admin-app .app-editor{padding:0 16px 18px}.admin-app .app-editor .form-grid{grid-template-columns:minmax(0,1fr);padding:16px 0}.admin-app .edit-panel>form>.ai-entry-fill{margin:0 16px 16px;padding:14px}.admin-app .resource-workflow>.form-actions,.admin-app .workflow-summary{padding:16px}.admin-app .resource-workflow>p{padding:0 16px 14px}.admin-app .revision-list,.admin-app .workflow-history{margin:16px}.admin-app .ai-config-form{padding:16px}.admin-app .user-form,.admin-app .password-form{padding:16px;grid-template-columns:1fr}.admin-pagination{padding:16px;gap:12px}.admin-pagination-actions{width:100%;justify-content:space-between;gap:4px}.admin-pagination .button{padding:8px;font-size:11px}.ad-location-details.is-compact{min-width:200px}}
+/* Video filters have their own full-width layout, independent of list toolbars. */
+.admin-app .video-library-filters{padding:24px;border-bottom:1px solid var(--line)}
+.admin-app .video-filter-primary{display:grid;grid-template-columns:minmax(200px,1.6fr) repeat(3,minmax(0,1fr));gap:16px}
+.admin-app .video-filter-field{display:flex;flex-direction:column;gap:8px;min-width:0;font-size:12px;color:#536078}
+.admin-app .video-library-filters input,.admin-app .video-library-filters select{width:100%;min-width:0;max-width:100%;height:42px;box-sizing:border-box;font-size:13px;background:#fff}
+.admin-app .video-filter-toggle{display:flex;align-items:center;gap:8px;border:0;background:transparent;padding:16px 0;color:var(--blue);font-size:12px;min-height:44px;cursor:pointer}
+.admin-app .video-filter-toggle[aria-expanded=true] svg{transform:rotate(180deg)}
+.admin-app .video-filter-toggle small{color:#7b879b;font-size:12px}
+.admin-app .video-filter-count{border-radius:12px;background:#edf1fe;padding:2px 7px;font-size:11px}
+.admin-app .video-filter-advanced{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 16px;padding:20px;background:#f7f9fc;border:1px solid var(--line);border-radius:8px;margin-bottom:16px}
+.admin-app .video-filter-advanced[hidden]{display:none}
+.admin-app .video-filter-advanced>div{min-width:0}
+.admin-app .video-filter-range{grid-column:span 2;min-width:0;padding:0;border:0;margin:0}
+.admin-app .video-filter-range legend{padding:0;margin-bottom:8px;font-size:12px;color:#536078}
+.admin-app .video-filter-range>div{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center}
+.admin-app .video-filter-range .video-filter-field>span{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden;white-space:nowrap}
+.admin-app .video-filter-actions{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.admin-app .video-filter-actions p{margin:0;color:#536078;font-size:12px}
+.admin-app .video-filter-actions p>span{display:block;margin-top:5px;color:#7b879b;font-size:11px}
+.admin-app .video-filter-actions>div{display:flex;gap:10px}
+.admin-app .video-filter-actions .button{min-height:42px;padding:10px 18px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+@media(max-width:1100px){.admin-app .video-filter-primary,.admin-app .video-filter-advanced{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.admin-app .video-library-filters{padding:16px}.admin-app .video-filter-primary,.admin-app .video-filter-advanced{grid-template-columns:minmax(0,1fr)}.admin-app .video-filter-advanced{padding:16px 12px}.admin-app .video-filter-range{grid-column:span 1}.admin-app .video-filter-toggle{flex-wrap:wrap}.admin-app .video-filter-toggle small{display:none}.admin-app .video-filter-actions{align-items:stretch;flex-direction:column}.admin-app .video-filter-actions>div{display:grid;grid-template-columns:1fr 1fr}.admin-app .video-filter-range>div{gap:6px}}

@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import sharp from 'sharp';
+import {convertImage,uploadPath,boundedForm} from '../lib/uploads.js';
+const testImage=()=>sharp({create:{width:720,height:960,channels:3,background:'#334155'}}).png().toBuffer();
+test('原创 PNG 转换为无元数据的静态 WebP',async()=>{const output=await convertImage(await testImage(),'cover');const meta=await sharp(output).metadata();assert.equal(meta.format,'webp');assert.equal(meta.width,720);assert.equal(meta.height,960);assert.equal(meta.exif,undefined);});
+test('图标上传保持比例并限制长边为 512px',async()=>{const output=await convertImage(await testImage(),'icon');const meta=await sharp(output).metadata();assert.ok(meta.width<=512&&meta.height<=512);});
+test('伪装图片、SVG 和超过用途限额的文件被拒绝',async()=>{await assert.rejects(convertImage(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>'),'cover'),e=>e.status===422);await assert.rejects(convertImage(Buffer.from('not an image'),'cover'),e=>e.status===422);await assert.rejects(convertImage(Buffer.alloc(2*1024*1024+1),'icon'),e=>e.status===422);await assert.rejects(convertImage(Buffer.from('x'),'unknown'),e=>e.status===422);});
+test('文件路径拒绝目录穿越及非受控扩展',()=>{for(const n of ['../../.env.local','file.svg','abc.webp','a.webp/../x'])assert.throws(()=>uploadPath(n),e=>e.status===404);});
+test('流式读取上传表单执行实际字节上限',async()=>{const req=new Request('http://localhost/api/admin/upload',{method:'POST',body:Buffer.alloc(6*1024*1024+1)});await assert.rejects(boundedForm(req),e=>e.status===413);});

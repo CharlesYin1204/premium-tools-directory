@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {adListMetrics} from '../lib/ad-list-metrics.js';
+test('广告列表跨快照汇总计数并重算CTR，零分母不补造',()=>{const m=adListMetrics([{placement_id:'a',clicks:'1',impressions:'2'},{placement_id:'a',clicks:'2',impressions:'8'},{placement_id:'b',clicks:3,impressions:0},{placement_id:'c',clicks:3,impressions:2}]);assert.deepEqual(m.get('a'),{clicks:3,impressions:10,ctr:.3});assert.equal(m.get('b').ctr,null);assert.equal(m.get('c').ctr,1.5);assert.equal(m.has('missing'),false);});

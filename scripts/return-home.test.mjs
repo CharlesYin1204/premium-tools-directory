@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {defaultReturnHome,returnHomeError,visibleReturnHome} from '../lib/return-home.js';
+const link={label:'主入口',url:'https://example.org/',kind:'permanent',check_status:'unchecked',checked_at:''};
+const enabled=()=>({...defaultReturnHome(),enabled:true,links:[{...link}]});
+test('旧配置与空配置不展示，启用必须至少一个真实地址',()=>{assert.equal(visibleReturnHome(undefined),null);assert.equal(visibleReturnHome(defaultReturnHome()),null);assert.ok(returnHomeError({...defaultReturnHome(),enabled:true}));assert.equal(returnHomeError(enabled()),null);});
+test('地址协议、认证信息、查询参数与重复地址均受约束',()=>{for(const url of ['javascript:alert(1)','http://example.org','https://user:pass@example.org/','https://example.org/?token=secret','https://example.org/#fragment'])assert.ok(returnHomeError({...enabled(),links:[{...link,url}]}));assert.ok(returnHomeError({...enabled(),links:[link,{...link,url:'https://example.org'}]}));});
+test('核验状态不能凭空正常，必须日期合法且不在未来',()=>{for(const checked_at of ['', '2026-02-30','2999-01-01'])assert.ok(returnHomeError({...enabled(),links:[{...link,check_status:'ok',checked_at}]}));assert.equal(returnHomeError({...enabled(),links:[{...link,check_status:'failed',checked_at:'2026-01-01'}]}),null);assert.equal(returnHomeError({...enabled(),links:[{...link,check_status:'ok',checked_at:'2026-01-01'}]}),null);});

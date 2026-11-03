@@ -1,0 +1,27 @@
+import {contentHistorySchema} from '../lib/content-history.js';
+import {migrateEventResourceMode} from '../lib/event-resource-mode.js';
+import {migratePublishRules} from '../lib/publish-rules.js';
+import {migrateClickIp} from '../lib/click-ip.js';
+import {syncScheduleSchema} from '../lib/sync-schedule-schema.js';
+import {configDefaults} from '../lib/site-config.js';
+import {pool,query,transaction} from '../lib/db.js';
+import {randomBytes,scryptSync} from 'node:crypto';
+import {writeFileSync,existsSync} from 'node:fs';
+const statements=[syncScheduleSchema,contentHistorySchema,
+`CREATE TABLE IF NOT EXISTS integration_configs(name VARCHAR(60) PRIMARY KEY,config JSON NOT NULL,secret TEXT,version INT NOT NULL DEFAULT 1,check_status VARCHAR(30) DEFAULT 'not_checked',checked_at DATETIME NULL,updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)`,
+`CREATE TABLE IF NOT EXISTS resources (id VARCHAR(36) PRIMARY KEY,kind VARCHAR(20) NOT NULL,slug VARCHAR(100) NOT NULL,draft JSON NOT NULL,published JSON NULL,status VARCHAR(20) NOT NULL DEFAULT 'draft',version INT NOT NULL DEFAULT 1,revoked BOOLEAN NOT NULL DEFAULT FALSE,manual_excluded BOOLEAN NOT NULL DEFAULT FALSE,created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3),updated_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),published_at DATETIME(3) NULL,UNIQUE KEY resource_slug(kind,slug))`,
+`CREATE TABLE IF NOT EXISTS admins (id VARCHAR(36) PRIMARY KEY,username VARCHAR(80) UNIQUE NOT NULL,name VARCHAR(80) NOT NULL,password_hash VARCHAR(200) NOT NULL,role VARCHAR(20) NOT NULL,enabled BOOLEAN DEFAULT TRUE,created_at DATETIME DEFAULT CURRENT_TIMESTAMP)`,
+`CREATE TABLE IF NOT EXISTS sessions (token_hash CHAR(64) PRIMARY KEY,user_id VARCHAR(36) NOT NULL,expires_at DATETIME NOT NULL,INDEX(expires_at))`,
+`CREATE TABLE IF NOT EXISTS audit (id BIGINT AUTO_INCREMENT PRIMARY KEY,actor VARCHAR(80),action VARCHAR(40),resource_id VARCHAR(36),detail JSON,created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3))`,
+`CREATE TABLE IF NOT EXISTS revisions (id BIGINT AUTO_INCREMENT PRIMARY KEY,resource_id VARCHAR(36),version INT,payload JSON,actor VARCHAR(80),created_at DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3))`,
+`CREATE TABLE IF NOT EXISTS events (event_id VARCHAR(80) PRIMARY KEY,event_name VARCHAR(40),occurred_at DATETIME(3) NOT NULL,received_at DATETIME(3) NULL,client_occurred_at DATETIME(3) NULL,time_basis VARCHAR(24) NULL,session_id VARCHAR(80),entry_id VARCHAR(36),company_id VARCHAR(36),company_name VARCHAR(100),entry_name VARCHAR(100),content_id VARCHAR(36),placement_id VARCHAR(36),page VARCHAR(200),device VARCHAR(10),channel VARCHAR(100),is_test BOOLEAN DEFAULT FALSE,action_mode VARCHAR(16),os VARCHAR(16),target_platform VARCHAR(16),fallback_reason VARCHAR(40),ad_name VARCHAR(100),ad_type VARCHAR(16),slot_id VARCHAR(160),creative_version INT UNSIGNED,ad_snapshot JSON,page_view_id VARCHAR(80) NULL,impression_id VARCHAR(80) NULL,impression_key CHAR(64) CHARACTER SET ascii COLLATE ascii_bin NULL,attribution_status VARCHAR(24) NULL,recommendation_source_id VARCHAR(100) NULL,recommendation_rule VARCHAR(160) NULL,recommendation_position TINYINT UNSIGNED NULL,recommendation_snapshot JSON NULL,UNIQUE INDEX events_impression_key(impression_key),INDEX(occurred_at,event_name))`,
+`CREATE TABLE IF NOT EXISTS sync_jobs (id VARCHAR(36) PRIMARY KEY,type VARCHAR(15),state VARCHAR(20),sync_cursor TEXT,counts JSON,lease_until DATETIME NULL,worker_token VARCHAR(36) NULL,error_code VARCHAR(60),error_message TEXT,created_at DATETIME DEFAULT CURRENT_TIMESTAMP,updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)`,
+`CREATE TABLE IF NOT EXISTS source_records (source_system VARCHAR(80),source_id VARCHAR(100),resource_id VARCHAR(36),source_updated_at VARCHAR(40),payload JSON,PRIMARY KEY(source_system,source_id))`,
+`CREATE TABLE IF NOT EXISTS rate_limits (bucket CHAR(64) PRIMARY KEY,hits INT,expires_at DATETIME)`,
+`CREATE TABLE IF NOT EXISTS system_health (name VARCHAR(60) PRIMARY KEY,message VARCHAR(200),updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)`];
+for(const s of statements)await query(s);
+const site={...configDefaults(),name:'精品工具导航站',hero_title:'好工具，\n从这里发现。',hero_subtitle:'精选可靠工具，让工作与创作更高效。',seo_description:'精品工具导航站，发现优质 AI、设计、开发、办公与效率工具。',footer:'发现更高效的工作方式。',contact_email:'',privacy:'本站无需注册即可浏览。不设置持久访客标识；匿名访客 UV 暂不统计。运营后台使用必要的登录会话 Cookie。',rights_policy:'仅展示经审核发布的工具资料。权利人可通过本站配置的反馈渠道联系运营处理。',analytics_enabled:true,content_release_approved:false,approval_note:'',video_seconds:3};
+await query(`INSERT IGNORE INTO resources(id,kind,slug,draft,published,status) VALUES('site','settings','site',?,?,'published')`,[JSON.stringify(site),JSON.stringify(site)]);
+const admins=await query('SELECT id FROM admins LIMIT 1');
+if(!admins.length){const pw=randomBytes(18).toString('base64url'),salt=randomBytes(16).toString('hex');const hash=salt+':'+scryptSync(pw,salt,64).toString('hex');await query("INSERT INTO admins(id,username,name,password_hash,role) VALUES(UUID(),'admin','站点管理员',?,'super')",[hash]);writeFileSync('.admin-credentials',`后台地址：${process.env.PUBLIC_URL}/admin/login\n账号：admin\n密码：${pw}\n`,{mode:0o600});console.log('管理员已创建，凭据已保存至 .admin-credentials（权限 600）');}
+console.log('数据库结构与站点设置就绪；未插入虚构公司、入口、内容或访问数据。');await migrateEventResourceMode(pool);await migratePublishRules(pool);await migrateClickIp(pool);await pool.end();

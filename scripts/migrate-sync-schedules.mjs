@@ -1,0 +1,1 @@
+import {query,pool} from '../lib/db.js';import {syncScheduleSchema} from '../lib/sync-schedule-schema.js';try{await query(syncScheduleSchema);console.log('sync_schedules ready; no schedule or job created');}finally{await pool.end();}

@@ -1,0 +1,22 @@
+[Unit]
+Description=Premium tools directory durable content sync worker
+After=network.target mysqld.service
+
+[Service]
+Type=simple
+WorkingDirectory=/www/wwwroot/daohang
+Environment=NODE_ENV=production
+ExecStart=/opt/laosiji-runtime/node-v22.16.0-linux-x64/bin/node --env-file=.env.local scripts/sync-worker.mjs
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+KillSignal=SIGTERM
+User=www
+Group=www
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/www/wwwroot/daohang
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,31 @@
+{
+  "categories": [
+    {"slug":"ai-tools","name":"AI 工具","description":"对话、检索、写作和创意辅助工具"},
+    {"slug":"design-tools","name":"设计工具","description":"界面设计、图片处理与在线白板工具"},
+    {"slug":"developer-tools","name":"开发工具","description":"代码托管、技术文档与开发者社区"},
+    {"slug":"office-tools","name":"办公协作","description":"文档、知识库、项目管理与团队协作"},
+    {"slug":"utility-tools","name":"效率工具","description":"翻译、压缩、文件传输等日常实用工具"}
+  ],
+  "entries": [
+    {"slug":"chatgpt","name":"ChatGPT","description":"通用 AI 助手，适合问答、写作、学习和创意工作。","url":"https://chatgpt.com/","category":"ai-tools","tags":["AI","写作","问答"],"mark":"AI","color":"#10a37f"},
+    {"slug":"claude","name":"Claude","description":"擅长长文本阅读、总结、写作与逻辑分析的 AI 助手。","url":"https://claude.ai/","category":"ai-tools","tags":["AI","总结","分析"],"mark":"CL","color":"#d97757"},
+    {"slug":"gemini","name":"Gemini","description":"Google 推出的多模态 AI 助手，可用于问答和内容创作。","url":"https://gemini.google.com/","category":"ai-tools","tags":["AI","多模态","Google"],"mark":"GE","color":"#4285f4"},
+    {"slug":"perplexity","name":"Perplexity","description":"带来源引用的 AI 搜索与研究工具。","url":"https://www.perplexity.ai/","category":"ai-tools","tags":["AI","搜索","研究"],"mark":"PX","color":"#20808d"},
+    {"slug":"figma","name":"Figma","description":"多人协作的界面设计和原型制作工具。","url":"https://www.figma.com/","category":"design-tools","tags":["设计","原型","协作"],"mark":"FG","color":"#a259ff"},
+    {"slug":"canva","name":"Canva 可画","description":"在线制作海报、演示文稿和社交媒体图片。","url":"https://www.canva.cn/","category":"design-tools","tags":["设计","海报","演示"],"mark":"CA","color":"#00c4cc"},
+    {"slug":"excalidraw","name":"Excalidraw","description":"简单易用的手绘风在线白板和流程图工具。","url":"https://excalidraw.com/","category":"design-tools","tags":["白板","流程图","协作"],"mark":"EX","color":"#6965db"},
+    {"slug":"photopea","name":"Photopea","description":"浏览器内使用的图片编辑工具，支持常见设计文件格式。","url":"https://www.photopea.com/","category":"design-tools","tags":["图片编辑","在线工具","设计"],"mark":"PP","color":"#18a497"},
+    {"slug":"github","name":"GitHub","description":"代码托管、版本管理和开源项目协作平台。","url":"https://github.com/","category":"developer-tools","tags":["代码","Git","开源"],"mark":"GH","color":"#24292f"},
+    {"slug":"mdn","name":"MDN Web Docs","description":"权威的 Web 开发技术文档与学习资料。","url":"https://developer.mozilla.org/zh-CN/","category":"developer-tools","tags":["文档","前端","学习"],"mark":"MD","color":"#1b1b1b"},
+    {"slug":"stackoverflow","name":"Stack Overflow","description":"开发者问答社区，可查找常见编程问题和解决思路。","url":"https://stackoverflow.com/","category":"developer-tools","tags":["编程","问答","社区"],"mark":"SO","color":"#f48024"},
+    {"slug":"npm","name":"npm","description":"JavaScript 软件包查询和发布平台。","url":"https://www.npmjs.com/","category":"developer-tools","tags":["JavaScript","软件包","开发"],"mark":"NP","color":"#cb3837"},
+    {"slug":"notion","name":"Notion","description":"整合笔记、知识库、数据库和项目管理的协作空间。","url":"https://www.notion.so/","category":"office-tools","tags":["笔记","知识库","协作"],"mark":"NO","color":"#000000"},
+    {"slug":"feishu","name":"飞书","description":"提供即时沟通、云文档、会议和多维表格的协作平台。","url":"https://www.feishu.cn/","category":"office-tools","tags":["协作","文档","会议"],"mark":"飞书","color":"#3370ff"},
+    {"slug":"wps","name":"WPS Office","description":"常用的文字、表格、演示和 PDF 办公套件。","url":"https://www.wps.cn/","category":"office-tools","tags":["办公","文档","表格"],"mark":"WPS","color":"#e2231a"},
+    {"slug":"trello","name":"Trello","description":"通过看板管理个人任务和团队项目进度。","url":"https://trello.com/","category":"office-tools","tags":["项目管理","看板","任务"],"mark":"TR","color":"#0c66e4"},
+    {"slug":"deepl","name":"DeepL 翻译","description":"支持多种语言的在线翻译和写作辅助工具。","url":"https://www.deepl.com/translator","category":"utility-tools","tags":["翻译","语言","写作"],"mark":"DL","color":"#0f2b46"},
+    {"slug":"tinypng","name":"TinyPNG","description":"在线压缩 PNG、JPEG 和 WebP 图片，减小文件体积。","url":"https://tinypng.com/","category":"utility-tools","tags":["图片压缩","性能","在线工具"],"mark":"TP","color":"#2f855a"},
+    {"slug":"wetransfer","name":"WeTransfer","description":"无需复杂设置即可在线发送较大的文件。","url":"https://wetransfer.com/","category":"utility-tools","tags":["文件传输","分享","在线工具"],"mark":"WT","color":"#4461f2"},
+    {"slug":"speedtest","name":"Speedtest","description":"测试当前网络的下载、上传速度和延迟。","url":"https://www.speedtest.net/","category":"utility-tools","tags":["测速","网络","在线工具"],"mark":"ST","color":"#141526"}
+  ]
+}

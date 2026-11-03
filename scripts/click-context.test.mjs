@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {sourcePage} from '../lib/click-context.js';
+test('点击来源仅保存站内路径，不保存查询或片段',()=>{assert.equal(sourcePage('/search?q=private#result'),'/search');assert.equal(sourcePage('/comic/story'),'/comic/story');assert.equal(sourcePage('/'),'/');for(const v of ['https://example.com','//example.com','/\\example.com','/hello\nworld','/'+'a'.repeat(200),null])assert.equal(sourcePage(v),null);});

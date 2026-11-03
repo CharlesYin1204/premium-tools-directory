@@ -1,0 +1,5 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {categoryEntries,categoryNavigation,activeNavigation} from '../lib/category-navigation.js';
+const cats=[{id:'parent',slug:'parent'},{id:'child',parent_id:'parent'},{id:'empty',parent_id:'parent'},{id:'other'}];const entries=[{id:'one',category_ids:['child']},{id:'two',category_ids:['parent','child']},{id:'three',category_ids:['other']}];
+test('父分类汇总子类且多分类入口不重复',()=>{assert.deepEqual(categoryEntries(cats[0],entries,cats).map(e=>e.id),['one','two']);assert.deepEqual(categoryEntries(cats[1],entries,cats).map(e=>e.id),['one','two']);});
+test('只有子类有入口时保留父导航，隐藏空子分类',()=>{const nav=categoryNavigation(cats[1],[entries[0]],cats);assert.deepEqual(nav.roots.map(c=>c.id),['parent']);assert.deepEqual(nav.children.map(c=>c.id),['child']);assert.equal(nav.parent.id,'parent');});
+test('详情高亮对应导航，不误匹配其他路径',()=>{for(const [path,href] of [['/category/design','/categories'],['/video/orbit','/videos'],['/comic/story','/comics']])assert.equal(activeNavigation(path,href),true);assert.equal(activeNavigation('/videos-other','/videos'),false);assert.equal(activeNavigation('/search','/'),false);});

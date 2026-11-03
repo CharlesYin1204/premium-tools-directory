@@ -1,0 +1,4 @@
+export default function ReportTiming({timing}){
+ if(!timing)return null;
+ return <section className="panel" aria-label="事件时间与数据延迟"><div className="panel-title"><div><h2>事件时间与数据延迟</h2><p>与当前报表筛选一致，日期按有效发生时间归属；迟到记录会更新原日期的统计。</p></div></div><div className="reconciliation-grid">{[['超过 '+timing.policy.late_seconds+' 秒到达',timing.delayed_events],['旧记录时间依据未知',timing.legacy_unknown],['缺发生时间，按接收计',timing.server_fallback],['设备时钟提前已修正',timing.clock_adjusted]].map(([label,value])=><div key={label}><span>{label}</span><strong>{value}</strong></div>)}</div><p className="report-footnote">最近接收：{timing.latest_received_at||'暂无可用接收时间'}（上海）；最大已知延迟：{timing.max_delay_seconds==null?'—':Number(timing.max_delay_seconds).toFixed(3)+' 秒'}。新事件接收窗口为过去 {timing.policy.max_delay_hours} 小时，设备时钟提前最多 {timing.policy.max_future_seconds} 秒并按接收时间归属。旧记录不补造发生或接收时间；这些计数描述同一事件集的时间状态，不能相加当流量。</p></section>;
+}

@@ -1,0 +1,9 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {configDefaults,configError,localLink,supportHref} from '../lib/site-config.js';
+import {validate} from '../lib/resources.js';
+test('空客服不制造默认联系渠道；旧配置兼容',()=>{const d=configDefaults();assert.equal(d.support_enabled,false);assert.deepEqual(d.support_channels,[]);assert.equal(configError(d),null);assert.equal(configError({}),null);});
+test('菜单数量、重复、布尔及文案长度约束',()=>{for(const patch of [{navigation:Array(13).fill({})},{navigation:[{href:'/',label:'首页',enabled:'false'}]},{navigation:[{href:'/',label:'首页',enabled:true},{href:'/',label:'重复',enabled:true}]},{page_copy:{search_button:'x'.repeat(13)}}])assert.ok(configError({...configDefaults(),...patch}));});
+test('相对链接拒绝协议相对、转义反斜杠和控制字符',()=>{for(const s of ['//evil.com','/\\evil.com','/%5cevil.com','/a\nb','javascript:alert(1)'])assert.equal(localLink(s),false,s);assert.equal(localLink('/videos?sort=new'),true);});
+test('客服渠道校验以及邮箱电话协议',()=>{const d=configDefaults(),c={type:'telegram',label:'联系',enabled:true,value:'',note:'',qr_url:''};assert.ok(configError({...d,support_channels:[c]}));assert.ok(configError({...d,support_channels:[{...c,type:'email',value:'invalid'}]}));assert.ok(configError({...d,support_channels:[{...c,value:'https://t.me/a',enabled:'false'}]}));assert.equal(supportHref({type:'email',value:'service@example.org'}),'mailto:service@example.org');});
+test('服务端拒绝菜单脚本、内网和客服危险协议',async()=>{const d={...configDefaults(),name:'现有站点',hero_title:'站点标题',video_seconds:3};for(const href of ['javascript:alert(1)','http://127.0.0.1/','//evil.com'])await assert.rejects(validate('settings',{...d,navigation:[{label:'入口',href,enabled:true}]},[],'site'),e=>e.status===422);await assert.rejects(validate('settings',{...d,support_channels:[{type:'web',label:'客服',enabled:true,value:'javascript:alert(1)',note:'',qr_url:''}]},[],'site'),e=>e.status===422);});

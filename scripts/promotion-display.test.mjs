@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {promotionDisplay} from '../lib/promotion-display.js';
+const entries=['a','b','c'].map(id=>({id}));const p=(id,entry_id,device)=>({id,entry_id,device,location:'home'});
+test('只投PC时不生成H5标题或空模块',()=>{const groups=promotionDisplay({entries,placements:[p('1','a','pc')]},{location:'home'});assert.deepEqual(groups.map(x=>x.device),['pc']);});
+test('先按设备资格过滤再限量，重复及孤儿不占位置',()=>{const groups=promotionDisplay({entries,placements:[p('1','a','pc'),p('2','gone','all'),p('3','b','h5'),p('4','b','all'),p('5','c','all')]},{location:'home',limit:2});assert.deepEqual(groups[0].items.map(x=>x.entry_id),['a','b']);assert.deepEqual(groups[1].items.map(x=>x.entry_id),['b','c']);});
+test('限定页面不匹配、空列表及非法位置没有模块',()=>{assert.deepEqual(promotionDisplay({entries,placements:[]},{location:'home'}),[]);assert.deepEqual(promotionDisplay({entries,placements:[{...p('1','a','all'),category_id:'x'}]},{location:'home'}),[]);assert.deepEqual(promotionDisplay({entries,placements:[]},{location:'unknown'}),[]);});

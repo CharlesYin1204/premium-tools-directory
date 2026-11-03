@@ -1,0 +1,21 @@
+{
+  "checked_on": "2026-09-29",
+  "provenance": "从用户参考页面的普通搜索、社区和生活选项筛选，目标地址另经各服务官网核查；描述为本站简述，图标为文字标识，不冒充官方Logo。",
+  "categories": [
+    {"slug":"web-search","name":"搜索发现","description":"从不同搜索工具开始，查找网页与信息。"},
+    {"slug":"knowledge-community","name":"知识社区","description":"围绕问题、阅读与兴趣，发现不同观点。"},
+    {"slug":"daily-services","name":"生活服务","description":"查车票、看菜谱和查询快递，连接日常所需。"}
+  ],
+  "entries": [
+    {"slug":"google-search","name":"Google","description":"查找网页、图片及公开信息。","url":"https://www.google.com/","category":"web-search","tags":["搜索","网页"],"mark":"G","color":"#3866b4"},
+    {"slug":"bing-search","name":"Microsoft Bing","description":"微软提供的网络搜索入口。","url":"https://www.bing.com/","category":"web-search","tags":["搜索","网页"],"mark":"Bi","color":"#16857d"},
+    {"slug":"baidu-search","name":"百度","description":"搜索中文网页、资讯及相关信息。","url":"https://www.baidu.com/","category":"web-search","tags":["搜索","中文"],"mark":"BD","color":"#4e5bc4"},
+    {"slug":"so-search","name":"360 搜索","description":"搜索网页、图片和其他公开内容。","url":"https://www.so.com/","category":"web-search","tags":["搜索","中文"],"mark":"360","color":"#308650"},
+    {"slug":"sogou-search","name":"搜狗搜索","description":"从搜索关键词查找网页及相关信息。","url":"https://www.sogou.com/","category":"web-search","tags":["搜索","中文"],"mark":"SG","color":"#cc6d2e"},
+    {"slug":"zhihu-community","name":"知乎","description":"围绕问题和话题浏览知识分享与讨论。","url":"https://www.zhihu.com/","category":"knowledge-community","tags":["问答","知识"],"mark":"ZH","color":"#3673b8"},
+    {"slug":"douban-community","name":"豆瓣","description":"发现图书、电影、音乐及兴趣交流。","url":"https://www.douban.com/","category":"knowledge-community","tags":["阅读","兴趣"],"mark":"DB","color":"#588243"},
+    {"slug":"railway-12306","name":"铁路 12306","description":"中国铁路官方车票查询与出行服务入口。","url":"https://www.12306.cn/index/","category":"daily-services","tags":["出行","车票"],"mark":"123","color":"#405f95"},
+    {"slug":"xiachufang-recipes","name":"下厨房","description":"查找菜谱与烹饪方法，发现日常饮食灵感。","url":"https://www.xiachufang.com/","category":"daily-services","tags":["菜谱","生活"],"mark":"XC","color":"#b85c46"},
+    {"slug":"kuaidi100-tracking","name":"快递100","description":"查询快递物流并查看寄件服务。","url":"https://www.kuaidi100.com/","category":"daily-services","tags":["快递","生活"],"mark":"KD","color":"#82603f"}
+  ]
+}

@@ -1,0 +1,1 @@
+import {pool} from '../lib/db.js';import {migrateEventResourceMode} from '../lib/event-resource-mode.js';try{console.log({added:await migrateEventResourceMode(pool),historicalBackfill:false});}finally{await pool.end();}

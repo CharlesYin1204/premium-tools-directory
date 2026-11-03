@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {adEligible,activeAd,adState} from '../lib/ad-slots.js';
+import {promotionDisplay} from '../lib/promotion-display.js';
+import {placementConflict} from '../lib/placement-rules.js';
+const base={id:'ad',entry_id:'entry',location:'home',device:'all'};
+const data={entries:[{id:'entry'}],placements:[base],contents:[{id:'c',type:'video',slug:'movie'}],categories:[{id:'cat',slug:'tools'}]};
+test('暂停、到期与错误终端禁止投放；旧卡片仍有资格',()=>{assert.equal(adEligible(base,{device:'pc'}),true);assert.equal(adEligible({...base,paused:true}),false);assert.equal(adEligible({...base,end_at:'2020-01-01T00:00'}),false);assert.equal(adEligible({...base,device:'pc'},{device:'h5'}),false);assert.equal(adEligible({...base,template:'banner'},{device:'pc'}),false);});
+test('旧页面广告点击验证当前发布对象、终端、入口及所在页面',()=>{assert.equal(activeAd(data,'ad','entry','pc','/'),base);assert.equal(activeAd(data,'ad','other','pc','/'),null);assert.equal(activeAd(data,'ad','entry','pc','/search'),null);assert.equal(activeAd({...data,placements:[]},'ad','entry','pc','/'),null);const detail={...base,location:'detail',content_id:'c'};assert.equal(activeAd({...data,placements:[detail]},'ad','entry','pc','/video/movie'),detail);assert.equal(activeAd({...data,placements:[detail]},'ad','entry','pc','/video/c'),null);});
+test('H5横幅不压缩PC卡片容量',()=>{const entries=['a','b','c','d'].map(id=>({id}));const placements=entries.slice(0,3).map(e=>({...base,id:e.id,entry_id:e.id,location:'category',device:'pc'}));placements.push({...base,id:'h',entry_id:'d',location:'category',device:'h5',template:'banner',h5_image_url:'/media/real.webp'});const groups=promotionDisplay({entries,placements},{location:'category'});assert.equal(groups[0].items.length,3);assert.equal(groups[1].items.length,1);});
+test('同端排期禁止混合模板，相邻排期可接续',()=>{const card={...base,location:'category',start_at:'2026-10-08T00:00',end_at:'2026-10-09T00:00'};assert.equal(placementConflict({...card,entry_id:'b',template:'banner'},[card],1),'template');assert.equal(placementConflict({...card,entry_id:'b',template:'banner',start_at:'2026-10-09T00:00',end_at:''},[card],1),null);});
+test('广告状态使用发布排期而不是未发布草稿',()=>{assert.equal(adState({...base,has_published:true,start_at:'2099-01-01T00:00',live_schedule:{}}),'投放中');assert.equal(adState({...base,has_published:true,published_paused:true}),'已暂停');});

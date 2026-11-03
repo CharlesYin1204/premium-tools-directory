@@ -1,0 +1,25 @@
+node_modules/
+.next/
+.env*
+!.env.example
+artifacts/*.json
+artifacts/*.png
+*.log
+.admin-credentials
+storage/
+# GitHub 安全发布规则
+.env
+.env.*
+!.env.example
+node_modules/
+.next*/
+.admin-credentials
+logs/
+*.log
+database/backups/
+storage/uploads/
+storage/backups/
+产品设计需求文档/
+*.tar.gz
+*.zip
+.DS_Store
