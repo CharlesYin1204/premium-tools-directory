@@ -20,6 +20,7 @@ database/backups/
 storage/uploads/
 storage/backups/
 产品设计需求文档/
+project-docs/
 *.tar.gz
 *.zip
 .DS_Store
